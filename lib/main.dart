@@ -19,15 +19,24 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.red[600],
       ),
       body: Center(
-          // child: Text('"Beauty is my second name"\n-Me',
-          //   style: TextStyle(
-          //     fontSize: 30,
-          //     fontFamily: 'DancingScript',
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          //   textAlign: TextAlign.right,
-          // )
-        child: Image.asset('assets/star-2.png')
+        // child: Icon(
+        //   Icons.warning
+        // )
+        // child: ElevatedButton.icon(
+        //     onPressed: (){
+        //       print('You have been FREEZED!!!\n');
+        //     },
+        //     icon: const Icon(Icons.ac_unit_rounded),
+        //     label: const Text('FREEZE!'),
+        //     style: ButtonStyle(
+        //       backgroundColor: MaterialStateProperty.all(Colors.amber[600])
+        //     ),
+        child: IconButton(
+          onPressed: (){
+            print('You Pressed this Icon!');
+          },
+          icon: const Icon(Icons.gamepad)
+        )
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){},
