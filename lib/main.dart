@@ -18,15 +18,16 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.red[600],
       ),
-      body: const Center(
-          child: Text('"Beauty is my second name"\n-Me',
-            style: TextStyle(
-              fontSize: 30,
-              fontFamily: 'DancingScript',
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.right,
-          )
+      body: Center(
+          // child: Text('"Beauty is my second name"\n-Me',
+          //   style: TextStyle(
+          //     fontSize: 30,
+          //     fontFamily: 'DancingScript',
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          //   textAlign: TextAlign.right,
+          // )
+        child: Image.asset('assets/star-2.png')
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){},
