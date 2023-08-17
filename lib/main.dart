@@ -18,7 +18,10 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.red[600],
       ),
-      body: Center(
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        color: Colors.lightGreen,
+        margin: const EdgeInsets.all(10.0),
         // child: Icon(
         //   Icons.warning
         // )
