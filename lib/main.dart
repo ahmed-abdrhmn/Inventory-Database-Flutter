@@ -51,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.red[600],
       ),
       body: ListView(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 100.0), //give space below the items so they not blocked by plus button
         children: data.map(
                 (x) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -61,33 +62,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Container(
                             color: Colors.blueAccent,
-                            child: Text('Id: ${x.id}', style: HomeScreen.hStyle)
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Name: ${x.name}', style: HomeScreen.tStyle),
-                            Column(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ElevatedButton(
-                                    onPressed: (){},
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.deepPurple)
-                                    ),
-                                    child: Icon(Icons.edit)
-                                ),
-                                ElevatedButton(
-                                    onPressed: (){},
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.redAccent)
-                                    ),
-                                    child: Icon(Icons.delete)
+                                Text('Id: ${x.id}', style: HomeScreen.hStyle),
+                                PopupMenuButton<int>(
+                                    color: Colors.white,
+                                    position: PopupMenuPosition.under, //make the menu appear below the button
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem<int>(value: 0, child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Edit'),
+                                          Icon(Icons.edit)
+                                        ],
+                                      )),
+                                      PopupMenuItem<int>(value: 1, child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Delete'),
+                                          Icon(Icons.delete),
+                                        ],
+                                      ))
+                                    ]
                                 )
                               ],
                             )
-                          ],
                         ),
+                        Text('Name: ${x.name}', style: HomeScreen.tStyle),
                       ],
                     )
                   ),
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){},
-        backgroundColor: Colors.red[800],
+        backgroundColor: Colors.red[500],
         child: const Icon(Icons.add),
       ),
     );
