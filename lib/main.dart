@@ -63,7 +63,31 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.blueAccent,
                             child: Text('Id: ${x.id}', style: HomeScreen.hStyle)
                         ),
-                        Text('Name: ${x.name}', style: HomeScreen.tStyle),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Name: ${x.name}', style: HomeScreen.tStyle),
+                            Column(
+                              children: [
+                                ElevatedButton(
+                                    onPressed: (){},
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.deepPurple)
+                                    ),
+                                    child: Icon(Icons.edit)
+                                ),
+                                ElevatedButton(
+                                    onPressed: (){},
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.redAccent)
+                                    ),
+                                    child: Icon(Icons.delete)
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ],
                     )
                   ),
@@ -73,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: (){},
         backgroundColor: Colors.red[800],
-        child: const Text('Click!'),
+        child: const Icon(Icons.add),
       ),
     );
   }
