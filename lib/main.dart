@@ -103,13 +103,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         label: Text('Quantity')
                       ),
                       keyboardType: TextInputType.number,
+                      initialValue: '100',
                     ),
                     DropdownButtonFormField<int>(
+                      decoration: InputDecoration(
+                        label: Text('ForeginKeyId')
+                      ),
                       items: [
                         DropdownMenuItem(value: 1, child: Text('1')),
                         DropdownMenuItem(value: 2, child: Text('2')),
                         DropdownMenuItem(value: 5, child: Text('5'))
                       ],
+                      value: 2, //initial value?
                       onChanged: (value){},
                     )
                   ],
