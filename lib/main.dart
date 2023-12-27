@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:date_field/date_field.dart';
+import 'package:intl/intl.dart';
 
 class Item{
   int id;
@@ -42,6 +44,97 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Item> data = [Item(id: 15, name: 'loading...')];
 
+  void _handleEdit(int id, BuildContext context){
+
+  }
+
+  void _handlePopup(int id, int action, BuildContext context){
+    if (action == 1){ //DELETE
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Delete'),
+              content: Text('Sure wanna delete item#$id?'),
+              actions: [
+                ElevatedButton(
+                    onPressed: (){
+                      Navigator.of(context).pop(); //close the dialog, put return value here
+                    },
+                    child: Text('No')
+                ),
+                ElevatedButton(
+                    onPressed: (){
+                      Navigator.of(context).pop(); //close the dialog, put the return value here
+                    },
+                    child: Text('Yes')
+                ),
+              ],
+            );
+          }
+      );
+    }
+    else if (action == 0) { //EDIT
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Edit'),
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, //prevent the popup from occupying the whole vertical space of screen
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                          label: Text('Name')
+                      ),
+                      initialValue: 'Existing Name'
+                    ),
+                    DateTimeFormField(
+                      decoration: InputDecoration(
+                        label: Text('Expiry Date')
+                      ),
+                      mode: DateTimeFieldPickerMode.date,
+                      dateFormat: DateFormat('yyyy-MM-dd'), //date format should match the server (Though from the docs MySQL is pretty fexible but I don't want to depend on that)
+                      initialValue: DateTime(2023,12,27),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        label: Text('Quantity')
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    DropdownButtonFormField<int>(
+                      items: [
+                        DropdownMenuItem(value: 1, child: Text('1')),
+                        DropdownMenuItem(value: 2, child: Text('2')),
+                        DropdownMenuItem(value: 5, child: Text('5'))
+                      ],
+                      onChanged: (value){},
+                    )
+                  ],
+                )
+              ),
+              actions: [
+                ElevatedButton(
+                    onPressed: (){
+                      Navigator.of(context).pop(); //close the dialog, put return value here
+                    },
+                    child: Text('No')
+                ),
+                ElevatedButton(
+                    onPressed: (){
+                      Navigator.of(context).pop(); //close the dialog, put the return value here
+                    },
+                    child: Text('Yes')
+                ),
+              ],
+            );
+          }
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 PopupMenuButton<int>(
                                     color: Colors.white,
                                     position: PopupMenuPosition.under, //make the menu appear below the button
+                                    onSelected: (value) => _handlePopup(x.id, value, context),
                                     itemBuilder: (context) => [
                                       PopupMenuItem<int>(value: 0, child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
