@@ -1,142 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 import 'package:date_field/date_field.dart';
 import 'package:intl/intl.dart';
 
-class Item{
-  int id;
-  String name;
-
-  Item({required this.id, required this.name});
-
-  factory Item.fromJson(Map<String, dynamic> json){
-    return switch (json) {
-      {
-        'itemId': int id,
-        'name': String name
-      } => Item(
-        id: id,
-        name: name
-      ),
-      _ => throw const FormatException('This aint an item!')
-    };
-  }
-}
+import 'Screens/document.dart';
+import 'Screens/header.dart';
+import 'Screens/branch.dart';
+import 'Screens/item.dart';
+import 'Screens/package.dart';
 
 void main() {
   runApp(const MaterialApp(
     title: 'Ahmed\'s title',
-    home: HomeScreen(),
+    home: Body()
   ));
 }
 
-class HomeScreen extends StatefulWidget {
-  static const TextStyle tStyle = TextStyle(fontSize: 30);
-  static const TextStyle hStyle = TextStyle(fontSize: 30, color: Colors.white);
 
-  const HomeScreen({super.key});
+class Body extends StatefulWidget {
+  const Body({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<Body> createState() => _BodyState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  List<Item> data = [Item(id: 15, name: 'loading...')];
+const pages = <Widget>[
+  Document(),
+  Header(),
+  Branch(),
+  Item(),
+  Package()
+];
 
-  void _handleEdit(int id, BuildContext context){
+class _BodyState extends State<Body> {
+  int currentPageId = 0;
+  List<int> pageHistory = [];
+  bool popupShowing = false;
 
+  void _changePage(int nextId){
+    setState(() {
+      pageHistory.add(currentPageId);
+      currentPageId = nextId;
+    });
   }
 
-  void _handlePopup(int id, int action, BuildContext context){
-    if (action == 1){ //DELETE
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Delete'),
-              content: Text('Sure wanna delete item#$id?'),
-              actions: [
-                ElevatedButton(
-                    onPressed: (){
-                      Navigator.of(context).pop(); //close the dialog, put return value here
-                    },
-                    child: Text('No')
-                ),
-                ElevatedButton(
-                    onPressed: (){
-                      Navigator.of(context).pop(); //close the dialog, put the return value here
-                    },
-                    child: Text('Yes')
-                ),
-              ],
-            );
-          }
-      );
-    }
-    else if (action == 0) { //EDIT
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Edit'),
-              content: Form(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min, //prevent the popup from occupying the whole vertical space of screen
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                          label: Text('Name')
-                      ),
-                      initialValue: 'Existing Name'
-                    ),
-                    DateTimeFormField(
-                      decoration: InputDecoration(
-                        label: Text('Expiry Date')
-                      ),
-                      mode: DateTimeFieldPickerMode.date,
-                      dateFormat: DateFormat('yyyy-MM-dd'), //date format should match the server (Though from the docs MySQL is pretty fexible but I don't want to depend on that)
-                      initialValue: DateTime(2023,12,27),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        label: Text('Quantity')
-                      ),
-                      keyboardType: TextInputType.number,
-                      initialValue: '100',
-                    ),
-                    DropdownButtonFormField<int>(
-                      decoration: InputDecoration(
-                        label: Text('ForeginKeyId')
-                      ),
-                      items: [
-                        DropdownMenuItem(value: 1, child: Text('1')),
-                        DropdownMenuItem(value: 2, child: Text('2')),
-                        DropdownMenuItem(value: 5, child: Text('5'))
-                      ],
-                      value: 2, //initial value?
-                      onChanged: (value){},
-                    )
-                  ],
-                )
-              ),
-              actions: [
-                ElevatedButton(
-                    onPressed: (){
-                      Navigator.of(context).pop(); //close the dialog, put return value here
-                    },
-                    child: Text('No')
-                ),
-                ElevatedButton(
-                    onPressed: (){
-                      Navigator.of(context).pop(); //close the dialog, put the return value here
-                    },
-                    child: Text('Yes')
-                ),
-              ],
-            );
-          }
-      );
+  bool _prevPage(){ //returns if successfully backtracked
+    //To allow the back button to close the drawer
+    if(popupShowing) return false;
+
+    if (pageHistory.isNotEmpty){
+      setState(() {
+        currentPageId = pageHistory.last;
+        pageHistory.removeLast(); //pop it off from the history
+      });
+      return true;
+    }else{
+      return false;
     }
   }
 
@@ -144,86 +66,77 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ahmed Abdelrahman'),
+        title: const Text('Inventory'),
         centerTitle: true,
-        backgroundColor: Colors.red[600],
       ),
-      body: ListView(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 100.0), //give space below the items so they not blocked by plus button
-        children: data.map(
-                (x) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Card(
-                    clipBehavior: Clip.antiAlias, //makes the top surface smooth
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                            color: Colors.blueAccent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Id: ${x.id}', style: HomeScreen.hStyle),
-                                PopupMenuButton<int>(
-                                    color: Colors.white,
-                                    position: PopupMenuPosition.under, //make the menu appear below the button
-                                    onSelected: (value) => _handlePopup(x.id, value, context),
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem<int>(value: 0, child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Edit'),
-                                          Icon(Icons.edit)
-                                        ],
-                                      )),
-                                      PopupMenuItem<int>(value: 1, child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Delete'),
-                                          Icon(Icons.delete),
-                                        ],
-                                      ))
-                                    ]
-                                )
-                              ],
-                            )
-                        ),
-                        Text('Name: ${x.name}', style: HomeScreen.tStyle),
-                      ],
-                    )
-                  ),
-                )
-        ).toList(),
+      onDrawerChanged: (bool isOpen){ //This is used to keep track of the state of the drawer. Not sure if setState is necessary here.
+        print('The state of Drawer is $isOpen');
+        if (isOpen) {
+          setState(() {
+            popupShowing = true;
+          });
+        }else{
+          setState(() {
+            popupShowing = false;
+          });
+        }
+      },
+      drawer: Drawer(
+        child: Column(
+          children: [
+            DrawerHeader(
+                child: Text('Inventory'),
+            ),
+            ListTile(
+              title: Text('Documents'),
+              onTap: (){
+                _changePage(0);
+                Navigator.pop(context);
+              },
+              selected: currentPageId == 0,
+            ),
+            ListTile(
+              title: Text('Headers'),
+              onTap: (){
+                _changePage(1);
+                Navigator.pop(context);
+              },
+              selected: currentPageId == 1,
+            ),
+            ListTile(
+              title: Text('Branches'),
+              onTap: (){
+                _changePage(2);
+                Navigator.pop(context);
+                },
+              selected: currentPageId == 2,
+            ),
+            ListTile(
+              title: Text('Items'),
+              onTap: (){
+                _changePage(3);
+                Navigator.pop(context);
+              },
+              selected: currentPageId == 3,
+            ),
+            ListTile(
+              title: Text('Packages'),
+              onTap: (){
+                _changePage(4);
+                Navigator.pop(context);
+              },
+              selected: currentPageId == 4
+            )
+          ],
+        )
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        backgroundColor: Colors.red[500],
-        child: const Icon(Icons.add),
+      body: WillPopScope(
+          child: pages[currentPageId],
+          onWillPop: () async {
+              bool reversed = _prevPage();
+              return !reversed;
+            },
       ),
     );
   }
-
-  void fetchAndUpdate() async {
-    try {
-      var resp = await http.get(
-          Uri.parse('http://192.168.100.19:5230/api/item'));
-
-      List<Item> list = (jsonDecode(resp.body) as List).map((x) => Item.fromJson(x)).toList();
-      //List<Item> list = [Item(id: 1, name:'Banana'), Item(id: 2, name: 'BlueBerry'), Item(id: 3, name: 'Orange')];
-      setState(() {
-        data = list + list + list + list; //artificially make the list long
-      });
-    }catch(e){
-      setState((){
-        data = [Item(id:400,name:e.toString())];
-      });
-    }
-  }
-
-  @override
-  void initState(){
-    super.initState();
-    fetchAndUpdate();
-  }
 }
-
