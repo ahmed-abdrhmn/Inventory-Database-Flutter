@@ -7,7 +7,7 @@ import 'package:date_field/date_field.dart';
 import 'package:intl/intl.dart';
 
 import 'Screens/document.dart';
-import 'Screens/header.dart';
+import 'Screens/Header/header.dart';
 import 'Screens/branch.dart';
 import 'Screens/item.dart';
 import 'Screens/package.dart';
@@ -68,6 +68,7 @@ class _BodyState extends State<Body> {
       appBar: AppBar(
         title: const Text('Inventory'),
         centerTitle: true,
+        backgroundColor: Colors.redAccent,
       ),
       onDrawerChanged: (bool isOpen){ //This is used to keep track of the state of the drawer. Not sure if setState is necessary here.
         print('The state of Drawer is $isOpen');
@@ -136,6 +137,13 @@ class _BodyState extends State<Body> {
               bool reversed = _prevPage();
               return !reversed;
             },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){},
+        child: Icon(
+          Icons.add,
+          size: 40
+        ),
       ),
     );
   }
