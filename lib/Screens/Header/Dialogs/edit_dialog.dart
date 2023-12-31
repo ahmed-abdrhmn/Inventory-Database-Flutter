@@ -20,7 +20,7 @@ Future<DialogResult> showEditDialog(BuildContext context, {required List<int> br
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit'),
+          title: const Text('Edit Header'),
           content: Form(
               child: Column(
                 mainAxisSize: MainAxisSize.min, //prevent the popup from occupying the whole vertical space of screen
@@ -64,13 +64,13 @@ Future<DialogResult> showEditDialog(BuildContext context, {required List<int> br
                 onPressed: (){
                   Navigator.of(context).pop(false); //close the dialog, put return value here
                 },
-                child: const Text('No')
+                child: const Text('Cancel')
             ),
             ElevatedButton(
                 onPressed: (){
                   Navigator.of(context).pop(true); //close the dialog, put the return value here
                 },
-                child: const Text('Yes')
+                child: const Text('OK')
             ),
           ],
         );

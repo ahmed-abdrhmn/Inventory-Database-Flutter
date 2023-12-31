@@ -36,6 +36,7 @@ class HeaderCard extends StatelessWidget {
           children: [
             Container(
                 color: Colors.blueAccent,
+                padding: const EdgeInsets.fromLTRB(8.0,0,0,0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -64,21 +65,29 @@ class HeaderCard extends StatelessWidget {
                   ],
                 )
             ),
-            const Text('Branch: ', style: styles.tStyle),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
+              padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('BranchId: ${header.branch.branchId}', style: styles.tStyle),
-                  Text('Name: ${header.branch.name}', style: styles.tStyle)
+                  const Text('Branch: ', style: styles.tStyle),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('BranchId: ${header.branch.branchId}', style: styles.tStyle),
+                        Text('Name: ${header.branch.name}', style: styles.tStyle)
+                      ],
+                    )
+                  ),
+                  Text('DocDate: ${date_format.dateFormat.format(header.docDate)}', style: styles.tStyle),
+                  Text('Reference: ${header.reference}', style: styles.tStyle),
+                  Text('TotalValue: ${header.totalValue}', style: styles.tStyle),
+                  Text('Remarks: ${header.remarks}', style: styles.tStyle),
                 ],
-              )
-            ),
-            Text('DocDate: ${date_format.dateFormat.format(header.docDate)}', style: styles.tStyle),
-            Text('Reference: ${header.reference}', style: styles.tStyle),
-            Text('TotalValue: ${header.totalValue}', style: styles.tStyle),
-            Text('Remarks: ${header.remarks}', style: styles.tStyle)
+              ),
+            )
           ],
         )
     );
