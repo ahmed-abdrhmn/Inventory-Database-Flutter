@@ -151,48 +151,49 @@ class _HeaderState extends State<Header> {
     return FutureBuilder<List<header_query.HeaderEntity>>(
         future: _headers,
         builder: (context, snapshot){
-          if (snapshot.connectionState == ConnectionState.done){
-              if (!snapshot.hasError) {
-                return Stack(
-                  children: [
-                    // The actual list of entites
-                    ListView(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 100.0), //give space below the items so they not blocked by plus button
-                      children: snapshot.data!.map(
-                              (x) => Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: HeaderCard(
-                                    header: x,
-                                    onDelete: _handleElementDelete,
-                                    onEdit: _handleElementEdit,
-                                ),
-                              )
-                      ).toList(),
+          // First we check if there is some cached version of the data
+          // If there isn't, we check if there is an error
+          // If there isn't, we assume the data is still loading.
+          if (snapshot.hasData) {
+            return Stack(
+              children: [
+                // The actual list of entites
+                ListView(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 100.0), //give space below the items so they not blocked by plus button
+                  children: snapshot.data!.map(
+                          (x) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: HeaderCard(
+                                header: x,
+                                onDelete: _handleElementDelete,
+                                onEdit: _handleElementEdit,
+                            ),
+                          )
+                  ).toList(),
+                ),
+                // The floating action button. Normally this should be
+                // under the scaffold. But I put it here so I can pass
+                // different callback functions depending on the page
+                Positioned(
+                  bottom: 16.0,
+                  right: 16.0,
+                  child: FloatingActionButton(
+                    onPressed: _handleElementAdd,
+                    backgroundColor: Colors.blue,
+                    child: const Icon(
+                        Icons.add,
                     ),
-                    // The floating action button. Normally this should be
-                    // under the scaffold. But I put it here so I can pass
-                    // different callback functions depending on the page
-                    Positioned(
-                      bottom: 16.0,
-                      right: 16.0,
-                      child: FloatingActionButton(
-                        onPressed: _handleElementAdd,
-                        backgroundColor: Colors.blue,
-                        child: const Icon(
-                            Icons.add,
-                        ),
-                      )
-                    )
-                  ]
-                );
-              }else{
-                return Center(child: ListView(
-                  children: [
-                    Text(snapshot.error.toString(), style: styles.tStyle),
-                    Text(snapshot.stackTrace.toString(), style: styles.tStyle)
-                  ],
-                ));
-              }
+                  )
+                )
+              ]
+            );
+          }else if (snapshot.hasError){
+            return Center(child: ListView(
+              children: [
+                Text(snapshot.error.toString(), style: styles.tStyle),
+                Text(snapshot.stackTrace.toString(), style: styles.tStyle)
+              ],
+            ));
           }
           else{
             return const Center(child: CircularProgressIndicator());
