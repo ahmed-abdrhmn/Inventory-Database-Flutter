@@ -42,12 +42,12 @@ class BranchFields {
 
 const endpoint = 'branch';
 
-Future<BranchEntity> getAll() async {
+Future<List<BranchEntity>> getAll() async {
   http.Response resp = await http.get(Uri.parse('${config.apiUri}/$endpoint'));
   if (resp.statusCode != 200){ //Not Success
     throw Exception(resp.body);
   }
-  return BranchEntity.fromJson(jsonDecode(resp.body));
+  return (jsonDecode(resp.body) as List<dynamic>).map((x) => BranchEntity.fromJson(x)).toList();
 }
 
 Future<void> delete(int id) async {

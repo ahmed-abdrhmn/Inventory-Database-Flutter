@@ -137,14 +137,7 @@ class _BodyState extends State<Body> {
               bool reversed = _prevPage();
               return !reversed;
             },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        child: Icon(
-          Icons.add,
-          size: 40
-        ),
-      ),
+      )
     );
   }
 }

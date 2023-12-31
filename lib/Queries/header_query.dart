@@ -1,7 +1,7 @@
 import 'package:aproject/Queries/branch_query.dart';
-import 'package:aproject/Screens/Header/header.dart';
 import 'package:http/http.dart' as http;
 import '../config.dart' as config;
+import '../Screens/Shared/date_format.dart' as date_format;
 import 'dart:convert';
 
 // Entity classes are used as representation for GET methods response body
@@ -56,7 +56,7 @@ class HeaderFields {
     return {
       'inventoryInHeaderId': inventoryInHeaderId,
       'branchId': branchId,
-      'docDate': docDate.toString(),
+      'docDate': date_format.dateFormat.format(docDate),
       'reference': reference,
       'remarks': remarks
     };
@@ -82,10 +82,11 @@ Future<void> delete(int id) async {
   }
 }
 
-Future<void> create(HeaderEntity entity) async {
+Future<void> create(HeaderFields fields) async {
   http.Response resp = await http.post(
       Uri.parse('${config.apiUri}/$endpoint'),
-      body: jsonEncode(entity)
+      headers: {'content-type': 'application/json'},
+      body: jsonEncode(fields)
   );
 
   if (resp.statusCode != 200){ //Not Success
@@ -93,10 +94,11 @@ Future<void> create(HeaderEntity entity) async {
   }
 }
 
-Future<void> update(int id, HeaderEntity entity) async {
+Future<void> update(int id, HeaderFields fields) async {
   http.Response resp = await http.put(
     Uri.parse('${config.apiUri}/$endpoint/$id'),
-    body: jsonEncode(entity)
+    headers: {'content-type': 'application/json'},
+    body: jsonEncode(fields)
   );
 
   if (resp.statusCode != 200){ //Not Success
