@@ -22,37 +22,39 @@ Future<DialogResult> showAddDialog(BuildContext context, {required List<int> bra
         return AlertDialog(
           title: const Text('Add Header'),
           content: Form(
-              child: Column(
-                mainAxisSize: MainAxisSize.min, //prevent the popup from occupying the whole vertical space of screen
-                children: [
-                  DropdownButtonFormField<int?>(
-                    decoration: const InputDecoration(
-                        label: Text('BranchId')
-                    ),
-                    items: branchIds.map((i) => DropdownMenuItem<int>(value: i, child: Text(i.toString()))).toList(),
-                    onChanged: (value){branchId = value!;},
-                  ),
-                  DateTimeFormField(
-                    decoration: const InputDecoration(
-                        label: Text('DocDate')
-                    ),
-                    mode: DateTimeFieldPickerMode.date,
-                    dateFormat: date_format.dateFormat, //date format should match the server (Though from the docs MySQL is pretty fexible but I don't want to depend on that)
-                    onDateSelected: (value){docDate = value;},
-                  ),
-                  TextFormField(
+              child: SingleChildScrollView( //needed to prevent overflow when keyboard shows up on screen
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, //prevent the popup from occupying the whole vertical space of screen
+                  children: [
+                    DropdownButtonFormField<int?>(
                       decoration: const InputDecoration(
-                          label: Text('Reference')
+                          label: Text('BranchId')
                       ),
-                      onChanged: (value){reference = value;},
-                  ),
-                  TextFormField(
+                      items: branchIds.map((i) => DropdownMenuItem<int>(value: i, child: Text(i.toString()))).toList(),
+                      onChanged: (value){branchId = value!;},
+                    ),
+                    DateTimeFormField(
                       decoration: const InputDecoration(
-                          label: Text('Remarks')
+                          label: Text('DocDate')
                       ),
-                      onChanged: (value){remarks = value;}
-                  ),
-                ],
+                      mode: DateTimeFieldPickerMode.date,
+                      dateFormat: date_format.dateFormat, //date format should match the server (Though from the docs MySQL is pretty fexible but I don't want to depend on that)
+                      onDateSelected: (value){docDate = value;},
+                    ),
+                    TextFormField(
+                        decoration: const InputDecoration(
+                            label: Text('Reference')
+                        ),
+                        onChanged: (value){reference = value;},
+                    ),
+                    TextFormField(
+                        decoration: const InputDecoration(
+                            label: Text('Remarks')
+                        ),
+                        onChanged: (value){remarks = value;}
+                    ),
+                  ],
+                ),
               )
           ),
           actions: [

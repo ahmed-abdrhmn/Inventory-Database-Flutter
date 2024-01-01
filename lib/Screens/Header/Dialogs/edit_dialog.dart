@@ -22,41 +22,43 @@ Future<DialogResult> showEditDialog(BuildContext context, {required List<int> br
         return AlertDialog(
           title: const Text('Edit Header'),
           content: Form(
-              child: Column(
-                mainAxisSize: MainAxisSize.min, //prevent the popup from occupying the whole vertical space of screen
-                children: [
-                  DropdownButtonFormField<int?>(
-                    decoration: const InputDecoration(
-                        label: Text('BranchId')
-                    ),
-                    items: branchIds.map((i) => DropdownMenuItem<int>(value: i, child: Text(i.toString()))).toList(),
-                    value: fields.branchId,
-                    onChanged: (value){branchId = value!;},
-                  ),
-                  DateTimeFormField(
-                    decoration: const InputDecoration(
-                        label: Text('DocDate')
-                    ),
-                    mode: DateTimeFieldPickerMode.date,
-                    dateFormat: date_format.dateFormat, //date format should match the server (Though from the docs MySQL is pretty fexible but I don't want to depend on that)
-                    initialValue: fields.docDate,
-                    onDateSelected: (value){docDate = value;},
-                  ),
-                  TextFormField(
+              child: SingleChildScrollView( //prevent overflow
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, //prevent the popup from occupying the whole vertical space of screen
+                  children: [
+                    DropdownButtonFormField<int?>(
                       decoration: const InputDecoration(
-                          label: Text('Reference')
+                          label: Text('BranchId')
                       ),
-                      initialValue: fields.reference,
-                      onChanged: (value){reference = value;},
-                  ),
-                  TextFormField(
+                      items: branchIds.map((i) => DropdownMenuItem<int>(value: i, child: Text(i.toString()))).toList(),
+                      value: fields.branchId,
+                      onChanged: (value){branchId = value!;},
+                    ),
+                    DateTimeFormField(
                       decoration: const InputDecoration(
-                          label: Text('Remarks')
+                          label: Text('DocDate')
                       ),
-                      initialValue: fields.remarks,
-                      onChanged: (value){remarks = value;}
-                  ),
-                ],
+                      mode: DateTimeFieldPickerMode.date,
+                      dateFormat: date_format.dateFormat, //date format should match the server (Though from the docs MySQL is pretty fexible but I don't want to depend on that)
+                      initialValue: fields.docDate,
+                      onDateSelected: (value){docDate = value;},
+                    ),
+                    TextFormField(
+                        decoration: const InputDecoration(
+                            label: Text('Reference')
+                        ),
+                        initialValue: fields.reference,
+                        onChanged: (value){reference = value;},
+                    ),
+                    TextFormField(
+                        decoration: const InputDecoration(
+                            label: Text('Remarks')
+                        ),
+                        initialValue: fields.remarks,
+                        onChanged: (value){remarks = value;}
+                    ),
+                  ],
+                ),
               )
           ),
           actions: [

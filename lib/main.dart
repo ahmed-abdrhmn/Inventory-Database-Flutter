@@ -7,6 +7,8 @@ import 'Screens/Branch/branch.dart';
 import 'Screens/Item/item.dart';
 import 'Screens/Package/package.dart';
 
+import 'Screens/Shared/styles.dart' as styles;
+
 void main() {
   runApp(const MaterialApp(
     title: 'Ahmed\'s title',
@@ -28,6 +30,14 @@ const pages = <Widget>[
   Branch(),
   Item(),
   Package()
+];
+
+const pageTitles = <String>[
+  'Documents',
+  'Headers',
+  'Branches',
+  'Items',
+  'Packages'
 ];
 
 class _BodyState extends State<Body> {
@@ -61,7 +71,7 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inventory'),
+        title: Text(pageTitles[currentPageId]), //show the title of the current page
         centerTitle: true,
         backgroundColor: Colors.redAccent,
       ),
@@ -79,12 +89,16 @@ class _BodyState extends State<Body> {
       },
       drawer: Drawer(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            DrawerHeader(
-                child: Text('Inventory'),
+            const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.red
+                ),
+                child: Text('Inventory', style: styles.hStyle,),
             ),
             ListTile(
-              title: Text('Documents'),
+              title: const Text('Documents'),
               onTap: (){
                 _changePage(0);
                 Navigator.pop(context);
@@ -92,7 +106,7 @@ class _BodyState extends State<Body> {
               selected: currentPageId == 0,
             ),
             ListTile(
-              title: Text('Headers'),
+              title: const Text('Headers'),
               onTap: (){
                 _changePage(1);
                 Navigator.pop(context);
@@ -100,7 +114,7 @@ class _BodyState extends State<Body> {
               selected: currentPageId == 1,
             ),
             ListTile(
-              title: Text('Branches'),
+              title: const Text('Branches'),
               onTap: (){
                 _changePage(2);
                 Navigator.pop(context);
@@ -108,7 +122,7 @@ class _BodyState extends State<Body> {
               selected: currentPageId == 2,
             ),
             ListTile(
-              title: Text('Items'),
+              title: const Text('Items'),
               onTap: (){
                 _changePage(3);
                 Navigator.pop(context);
@@ -116,7 +130,7 @@ class _BodyState extends State<Body> {
               selected: currentPageId == 3,
             ),
             ListTile(
-              title: Text('Packages'),
+              title: const Text('Packages'),
               onTap: (){
                 _changePage(4);
                 Navigator.pop(context);
