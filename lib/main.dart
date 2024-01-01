@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
 
-import 'dart:convert';
-import 'package:date_field/date_field.dart';
-import 'package:intl/intl.dart';
 
-import 'Screens/document.dart';
+import 'Screens/Document/document.dart';
 import 'Screens/Header/header.dart';
 import 'Screens/branch.dart';
 import 'Screens/item.dart';

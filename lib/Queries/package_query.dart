@@ -5,49 +5,49 @@ import 'dart:convert';
 // Entity classes are used as representation for GET methods response body
 // Fields classes are used as representation for POST/PUT methods request body
 
-class BranchEntity {
-  int branchId;
+class PackageEntity {
+  int packageId;
   String name;
 
-  BranchEntity({required this.branchId, required this.name});
+  PackageEntity({required this.packageId, required this.name});
 
-  factory BranchEntity.fromJson(Map<String,dynamic> json){
-    return BranchEntity(
-      branchId: json['branchId'],
+  factory PackageEntity.fromJson(Map<String,dynamic> json){
+    return PackageEntity(
+      packageId: json['packageId'],
       name: json['name']
     );
   }
 }
 
-class BranchFields {
-  int? branchId;
+class PackageFields {
+  int? packageId;
   String name;
 
-  BranchFields({this.branchId, required this.name});
+  PackageFields({this.packageId, required this.name});
 
-  factory BranchFields.fromEntity(BranchEntity entity){
-    return BranchFields(
-      branchId: entity.branchId,
+  factory PackageFields.fromEntity(PackageEntity entity){
+    return PackageFields(
+      packageId: entity.packageId,
       name: entity.name
     );
   }
 
   Map<String, dynamic> toJson(){
     return {
-      'branchId': branchId,
+      'packageId': packageId,
       'name': name
     };
   }
 }
 
-const endpoint = 'branch';
+const endpoint = 'package';
 
-Future<List<BranchEntity>> getAll() async {
+Future<List<PackageEntity>> getAll() async {
   http.Response resp = await http.get(Uri.parse('${config.apiUri}/$endpoint'));
   if (resp.statusCode != 200){ //Not Success
     throw Exception(resp.body);
   }
-  return (jsonDecode(resp.body) as List<dynamic>).map((x) => BranchEntity.fromJson(x)).toList();
+  return (jsonDecode(resp.body) as List<dynamic>).map((x) => PackageEntity.fromJson(x)).toList();
 }
 
 Future<void> delete(int id) async {
@@ -58,7 +58,7 @@ Future<void> delete(int id) async {
   }
 }
 
-Future<void> create(BranchFields entity) async {
+Future<void> create(PackageFields entity) async {
   http.Response resp = await http.post(
       Uri.parse('${config.apiUri}/$endpoint'),
       headers: {'content-type': 'application/json'}, //must explicitly set the content-type
@@ -70,7 +70,7 @@ Future<void> create(BranchFields entity) async {
   }
 }
 
-Future<void> update(int id, BranchFields entity) async {
+Future<void> update(int id, PackageFields entity) async {
   http.Response resp = await http.put(
     Uri.parse('${config.apiUri}/$endpoint/$id'),
     headers: {'content-type': 'application/json'}, //must explicitly set the content-type

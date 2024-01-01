@@ -85,7 +85,7 @@ Future<void> delete(int id) async {
 Future<void> create(HeaderFields fields) async {
   http.Response resp = await http.post(
       Uri.parse('${config.apiUri}/$endpoint'),
-      headers: {'content-type': 'application/json'},
+      headers: {'content-type': 'application/json'}, //must explicitly set the content-type
       body: jsonEncode(fields)
   );
 
@@ -97,7 +97,7 @@ Future<void> create(HeaderFields fields) async {
 Future<void> update(int id, HeaderFields fields) async {
   http.Response resp = await http.put(
     Uri.parse('${config.apiUri}/$endpoint/$id'),
-    headers: {'content-type': 'application/json'},
+    headers: {'content-type': 'application/json'}, //must explicitly set the content-type
     body: jsonEncode(fields)
   );
 
