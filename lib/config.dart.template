@@ -1,0 +1,6 @@
+//Create a copy of this file in the same directory and remove the .template extension.
+//That copy is what will be used to configure the application
+
+String host = '192.168.10.10'; //Replace with your machine's local ip address
+
+String apiUri = 'http://{host}:5230/api';
