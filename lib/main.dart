@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'Screens/Document/document.dart';
 import 'Screens/Header/header.dart';
-import 'Screens/branch.dart';
-import 'Screens/item.dart';
-import 'Screens/package.dart';
+import 'Screens/Branch/branch.dart';
+import 'Screens/Item/item.dart';
+import 'Screens/Package/package.dart';
 
 void main() {
   runApp(const MaterialApp(
